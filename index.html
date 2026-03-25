@@ -275,13 +275,6 @@
       /** ---------- DATA ---------- **/
       const EXERCISE = [
         {
-          id: 1,
-          punctuation: ".",
-          bank: ["Will", "loves", "his", "blue", "car"],
-          variants: [["Will", "loves", "his", "blue", "car"]],
-          ru: "Уилл любит свою синюю машину.",
-        },
-        {
           id: 2,
           punctuation: ".",
           bank: ["Grace", "often", "uses", "her", "father's", "camera"],
@@ -292,11 +285,71 @@
           ru: "Грэйс часто пользуется камерой своего отца.",
         },
         {
+          id: 12,
+          punctuation: ".",
+          bank: ["Grace", "doesn't", "sell", "her", "camera"],
+          variants: [["Grace", "doesn't", "sell", "her", "camera"]],
+          ru: "Грэйс не продаёт свою камеру.",
+        },
+        {
+          id: 7,
+          punctuation: "?",
+          bank: ["Does", "Grace", "take", "black-and-white", "photos"],
+          variants: [["Does", "Grace", "take", "black-and-white", "photos"]],
+          ru: "Грэйс делает чёрно-белые снимки?",
+        },
+        {
+          id: 14,
+          punctuation: ".",
+          bank: ["Naomi", "doesn't", "sleep", "on", "sofas"],
+          variants: [["Naomi", "doesn't", "sleep", "on", "sofas"]],
+          ru: "Наоми не спит на диванах.",
+        },
+
+        {
+          id: 5,
+          punctuation: ".",
+          bank: ["Naomi", "loves", "her", "bed"],
+          variants: [["Naomi", "loves", "her", "bed"]],
+          ru: "Наоми любит свою кровать.",
+        },
+
+        {
+          id: 8,
+          punctuation: "?",
+          bank: ["Does", "Monique", "keep", "a", "family", "ring"],
+          variants: [["Does", "Monique", "keep", "a", "family", "ring"]],
+          ru: "Моник хранит семейное кольцо?",
+        },
+
+        {
           id: 3,
           punctuation: ".",
           bank: ["Pat", "plays", "his", "Spanish", "guitar"],
           variants: [["Pat", "plays", "his", "Spanish", "guitar"]],
           ru: "Пэт играет на своей испанской гитаре.",
+        },
+        {
+          id: 10,
+          punctuation: "?",
+          bank: ["Does", "David", "ride", "his", "bike", "every", "day"],
+          variants: [["Does", "David", "ride", "his", "bike", "every", "day"]],
+          ru: "Дэвид ездит на велосипеде каждый день?",
+        },
+
+        {
+          id: 13,
+          punctuation: ".",
+          bank: ["David", "doesn't", "own", "a", "car"],
+          variants: [["David", "doesn't", "own", "a", "car"]],
+          ru: "У Дэвида нет машины.",
+        },
+        {
+          id: 9,
+          punctuation: "?",
+          bank: ["Does", "Theo", "use", "an", "Italian", "machine"],
+          variants: [["Does", "Theo", "use", "an", "Italian", "machine"]],
+          ru: "Тео пользуется итальянской кофемашиной?",
         },
         {
           id: 4,
@@ -306,11 +359,25 @@
           ru: "Тео пьёт две чашки каждый день.",
         },
         {
-          id: 5,
+          id: 15,
           punctuation: ".",
-          bank: ["Naomi", "loves", "her", "bed"],
-          variants: [["Naomi", "loves", "her", "bed"]],
-          ru: "Наоми любит свою кровать.",
+          bank: ["Alicia", "doesn't", "wear", "a", "new", "watch"],
+          variants: [["Alicia", "doesn't", "wear", "a", "new", "watch"]],
+          ru: "Алисия не носит новые часы.",
+        },
+        {
+          id: 1,
+          punctuation: ".",
+          bank: ["Will", "loves", "his", "blue", "car"],
+          variants: [["Will", "loves", "his", "blue", "car"]],
+          ru: "Уилл любит свою синюю машину.",
+        },
+        {
+          id: 11,
+          punctuation: ".",
+          bank: ["Will", "doesn't", "want", "a", "big", "car"],
+          variants: [["Will", "doesn't", "want", "a", "big", "car"]],
+          ru: "Уилл не хочет большую машину.",
         },
         {
           id: 6,
@@ -321,69 +388,6 @@
             ["Does", "Will", "drive", "around", "town", "regularly"],
           ],
           ru: "Уилл регулярно ездит по городу?",
-        },
-        {
-          id: 7,
-          punctuation: "?",
-          bank: ["Does", "Grace", "take", "black-and-white", "photos"],
-          variants: [["Does", "Grace", "take", "black-and-white", "photos"]],
-          ru: "Грэйс делает чёрно-белые снимки?",
-        },
-        {
-          id: 8,
-          punctuation: "?",
-          bank: ["Does", "Monique", "keep", "a", "family", "ring"],
-          variants: [["Does", "Monique", "keep", "a", "family", "ring"]],
-          ru: "Моник хранит семейное кольцо?",
-        },
-        {
-          id: 9,
-          punctuation: "?",
-          bank: ["Does", "Theo", "use", "an", "Italian", "machine"],
-          variants: [["Does", "Theo", "use", "an", "Italian", "machine"]],
-          ru: "Тео пользуется итальянской кофемашиной?",
-        },
-        {
-          id: 10,
-          punctuation: "?",
-          bank: ["Does", "David", "ride", "his", "bike", "every", "day"],
-          variants: [["Does", "David", "ride", "his", "bike", "every", "day"]],
-          ru: "Дэвид ездит на велосипеде каждый день?",
-        },
-        {
-          id: 11,
-          punctuation: ".",
-          bank: ["Will", "doesn't", "want", "a", "big", "car"],
-          variants: [["Will", "doesn't", "want", "a", "big", "car"]],
-          ru: "Уилл не хочет большую машину.",
-        },
-        {
-          id: 12,
-          punctuation: ".",
-          bank: ["Grace", "doesn't", "sell", "her", "camera"],
-          variants: [["Grace", "doesn't", "sell", "her", "camera"]],
-          ru: "Грэйс не продаёт свою камеру.",
-        },
-        {
-          id: 13,
-          punctuation: ".",
-          bank: ["David", "doesn't", "own", "a", "car"],
-          variants: [["David", "doesn't", "own", "a", "car"]],
-          ru: "У Дэвида нет машины.",
-        },
-        {
-          id: 14,
-          punctuation: ".",
-          bank: ["Naomi", "doesn't", "sleep", "on", "sofas"],
-          variants: [["Naomi", "doesn't", "sleep", "on", "sofas"]],
-          ru: "Наоми не спит на диванах.",
-        },
-        {
-          id: 15,
-          punctuation: ".",
-          bank: ["Alicia", "doesn't", "wear", "a", "new", "watch"],
-          variants: [["Alicia", "doesn't", "wear", "a", "new", "watch"]],
-          ru: "Алисия не носит новые часы.",
         },
       ];
 
