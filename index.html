@@ -397,6 +397,9 @@
         return a;
       }
 
+      /** Случайный порядок карточек при загрузке (исходный EXERCISE не меняется). */
+      const EXERCISES_DISPLAY = shuffle(EXERCISE);
+
       function normToken(t) {
         // normalize apostrophes and case
         return t.replace(/[’]/g, "'").toLowerCase();
@@ -491,7 +494,7 @@
 
       function render() {
         grid.innerHTML = "";
-        EXERCISE.forEach((it) => {
+        EXERCISES_DISPLAY.forEach((it) => {
           const card = document.createElement("div");
           card.className = "item";
           card.dataset.id = it.id;
