@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Drag-n-drop: Word order (Present Simple)</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        --bg: #e6f1fb;
+        --panel: #f4f9fd;
+        --panel2: #eaf4fb;
+        --text: #143652;
+        --muted: #546e82;
+        --token: #d4e8f7;
+        --token2: #c3ddf3;
+        --accent: #1e76c9;
+        --ok: #0b7a9c;
+        --bad: #c43d5c;
+        --border: rgba(28, 86, 130, 0.18);
+        --shadow: 0 12px 28px rgba(24, 64, 104, 0.14);
+        --radius: 14px;
+        --gap: 10px;
+        --font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background:
+          radial-gradient(1100px 580px at 12% 8%, #b8daf5 0%, transparent 52%),
+          radial-gradient(900px 520px at 85% 0%, #a8d4f5 0%, transparent 50%),
+          var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 28px auto;
+        padding: 0 16px 28px;
+      }
+      header {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.88),
+          rgba(240, 248, 253, 0.94)
+        );
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 16px 16px 14px;
+        margin-bottom: 14px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 6px;
+        letter-spacing: 0.2px;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 0;
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      button {
+        background: rgba(30, 118, 201, 0.18);
+        border: 1px solid rgba(30, 118, 201, 0.42);
+        color: var(--text);
+        padding: 10px 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      button:hover {
+        background: rgba(30, 118, 201, 0.28);
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button.secondary {
+        background: rgba(255, 255, 255, 0.55);
+        border: 1px solid var(--border);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .item {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.82),
+          rgba(238, 247, 252, 0.92)
+        );
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 14px;
+      }
+
+      .row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .meta {
+        min-width: 70px;
+        color: var(--muted);
+        font-size: 12px;
+        padding-top: 2px;
+        user-select: none;
+      }
+
+      .zones {
+        flex: 1 1 620px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .zone {
+        background: rgba(30, 118, 201, 0.08);
+        border: 1px dashed rgba(28, 86, 130, 0.28);
+        border-radius: 12px;
+        padding: 10px;
+        min-height: 52px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--gap);
+        align-items: center;
+      }
+      .zone.over {
+        outline: 2px solid rgba(30, 118, 201, 0.52);
+        outline-offset: 2px;
+      }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 2px 0 6px;
+        user-select: none;
+      }
+
+      .token {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.8),
+          rgba(212, 232, 247, 0.96)
+        );
+        border: 1px solid rgba(28, 86, 130, 0.22);
+        color: var(--text);
+        padding: 7px 10px;
+        border-radius: 999px;
+        cursor: grab;
+        user-select: none;
+        font-size: 14px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .token:hover {
+        border-color: rgba(30, 118, 201, 0.55);
+      }
+      .token:active {
+        cursor: grabbing;
+      }
+      .token.dragging {
+        opacity: 0.55;
+      }
+
+      .answerLine {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .punct {
+        font-weight: 800;
+        color: rgba(20, 54, 82, 0.92);
+        padding: 0 6px;
+        user-select: none;
+      }
+
+      .sentence-translation {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(28, 86, 130, 0.12);
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--muted);
+        user-select: none;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .status {
+        font-size: 13px;
+        color: var(--muted);
+        user-select: none;
+      }
+      .status.ok {
+        color: var(--ok);
+        font-weight: 700;
+      }
+      .status.bad {
+        color: var(--bad);
+        font-weight: 700;
+      }
+
+      .hint {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      @media (min-width: 920px) {
+        .zones {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Упражнение: восстанови порядок слов</h1>
+        <br />
+        <div>
+          <b> Подсказка:</b> помни про порядок слов:
+          <ul>
+            <li><b>+</b>: подлежащее + сказуемое</li>
+            <li><b>?</b>: do/does + сказуемое + подлежащее</li>
+            <li><b>-</b>: подлежащее + don't / doesn't + сказуемое</li>
+          </ul>
+
+          В предложениях с наречиями типа <b>regularly</b>,
+          <b>often</b> допускаются разные варианты расстановки слов:
+          <i>Grace often uses...</i> / <i>Grace uses... often</i> и
+          <i>Does Will regularly drive...</i> /
+          <i>Does Will drive... regularly</i>.
+        </div>
+        <div class="toolbar">
+          <button id="checkAll">Проверить все</button>
+          <button class="secondary" id="resetAll">Сбросить всё</button>
+        </div>
+      </header>
+
+      <div id="grid" class="grid"></div>
+
+      <p class="hint">
+        Примечание: для предложений с <i>often</i> и
+        <i>regularly</i> допускаются варианты: <i>Grace often uses...</i> /
+        <i>Grace uses... often</i> и <i>Does Will regularly drive...</i> /
+        <i>Does Will drive... regularly</i>.
+      </p>
+    </div>
+
+    <script>
+      /** ---------- DATA ---------- **/
+      const EXERCISE = [
+        {
+          id: 1,
+          punctuation: ".",
+          bank: ["Will", "loves", "his", "blue", "car"],
+          variants: [["Will", "loves", "his", "blue", "car"]],
+          ru: "Уилл любит свою синюю машину.",
+        },
+        {
+          id: 2,
+          punctuation: ".",
+          bank: ["Grace", "often", "uses", "her", "father's", "camera"],
+          variants: [
+            ["Grace", "often", "uses", "her", "father's", "camera"],
+            ["Grace", "uses", "her", "father's", "camera", "often"],
+          ],
+          ru: "Грэйс часто пользуется камерой своего отца.",
+        },
+        {
+          id: 3,
+          punctuation: ".",
+          bank: ["Pat", "plays", "his", "Spanish", "guitar"],
+          variants: [["Pat", "plays", "his", "Spanish", "guitar"]],
+          ru: "Пэт играет на своей испанской гитаре.",
+        },
+        {
+          id: 4,
+          punctuation: ".",
+          bank: ["Theo", "drinks", "two", "cups", "every", "day"],
+          variants: [["Theo", "drinks", "two", "cups", "every", "day"]],
+          ru: "Тео пьёт две чашки каждый день.",
+        },
+        {
+          id: 5,
+          punctuation: ".",
+          bank: ["Naomi", "loves", "her", "bed"],
+          variants: [["Naomi", "loves", "her", "bed"]],
+          ru: "Наоми любит свою кровать.",
+        },
+        {
+          id: 6,
+          punctuation: "?",
+          bank: ["Does", "Will", "regularly", "drive", "around", "town"],
+          variants: [
+            ["Does", "Will", "regularly", "drive", "around", "town"],
+            ["Does", "Will", "drive", "around", "town", "regularly"],
+          ],
+          ru: "Уилл регулярно ездит по городу?",
+        },
+        {
+          id: 7,
+          punctuation: "?",
+          bank: ["Does", "Grace", "take", "black-and-white", "photos"],
+          variants: [["Does", "Grace", "take", "black-and-white", "photos"]],
+          ru: "Грэйс делает чёрно-белые снимки?",
+        },
+        {
+          id: 8,
+          punctuation: "?",
+          bank: ["Does", "Monique", "keep", "a", "family", "ring"],
+          variants: [["Does", "Monique", "keep", "a", "family", "ring"]],
+          ru: "Моник хранит семейное кольцо?",
+        },
+        {
+          id: 9,
+          punctuation: "?",
+          bank: ["Does", "Theo", "use", "an", "Italian", "machine"],
+          variants: [["Does", "Theo", "use", "an", "Italian", "machine"]],
+          ru: "Тео пользуется итальянской кофемашиной?",
+        },
+        {
+          id: 10,
+          punctuation: "?",
+          bank: ["Does", "David", "ride", "his", "bike", "every", "day"],
+          variants: [["Does", "David", "ride", "his", "bike", "every", "day"]],
+          ru: "Дэвид ездит на велосипеде каждый день?",
+        },
+        {
+          id: 11,
+          punctuation: ".",
+          bank: ["Will", "doesn't", "want", "a", "big", "car"],
+          variants: [["Will", "doesn't", "want", "a", "big", "car"]],
+          ru: "Уилл не хочет большую машину.",
+        },
+        {
+          id: 12,
+          punctuation: ".",
+          bank: ["Grace", "doesn't", "sell", "her", "camera"],
+          variants: [["Grace", "doesn't", "sell", "her", "camera"]],
+          ru: "Грэйс не продаёт свою камеру.",
+        },
+        {
+          id: 13,
+          punctuation: ".",
+          bank: ["David", "doesn't", "own", "a", "car"],
+          variants: [["David", "doesn't", "own", "a", "car"]],
+          ru: "У Дэвида нет машины.",
+        },
+        {
+          id: 14,
+          punctuation: ".",
+          bank: ["Naomi", "doesn't", "sleep", "on", "sofas"],
+          variants: [["Naomi", "doesn't", "sleep", "on", "sofas"]],
+          ru: "Наоми не спит на диванах.",
+        },
+        {
+          id: 15,
+          punctuation: ".",
+          bank: ["Alicia", "doesn't", "wear", "a", "new", "watch"],
+          variants: [["Alicia", "doesn't", "wear", "a", "new", "watch"]],
+          ru: "Алисия не носит новые часы.",
+        },
+      ];
+
+      /** ---------- UTILS ---------- **/
+      function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      function normToken(t) {
+        // normalize apostrophes and case
+        return t.replace(/[’]/g, "'").toLowerCase();
+      }
+
+      function arraysEqual(a, b) {
+        if (a.length !== b.length) return false;
+        for (let i = 0; i < a.length; i++) {
+          if (normToken(a[i]) !== normToken(b[i])) return false;
+        }
+        return true;
+      }
+
+      function isCorrect(userTokens, variants) {
+        return variants.some((v) => arraysEqual(userTokens, v));
+      }
+
+      /** ---------- DnD (vanilla HTML5) ---------- **/
+      let draggedEl = null;
+
+      function makeToken(text) {
+        const el = document.createElement("span");
+        el.className = "token";
+        el.draggable = true;
+        el.textContent = text;
+
+        el.addEventListener("dragstart", (e) => {
+          draggedEl = el;
+          el.classList.add("dragging");
+          e.dataTransfer.effectAllowed = "move";
+          // Safari/Firefox compatibility:
+          e.dataTransfer.setData("text/plain", text);
+        });
+
+        el.addEventListener("dragend", () => {
+          el.classList.remove("dragging");
+          draggedEl = null;
+        });
+
+        // Click-to-move (useful on mobile)
+        el.addEventListener("click", () => {
+          const parent = el.parentElement;
+          if (!parent) return;
+          const itemEl = el.closest(".item");
+          const bank = itemEl.querySelector(".bank");
+          const answer = itemEl.querySelector(".answer");
+          if (parent === bank) answer.appendChild(el);
+          else bank.appendChild(el);
+          clearStatus(itemEl);
+        });
+
+        return el;
+      }
+
+      function wireZone(zoneEl) {
+        zoneEl.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          zoneEl.classList.add("over");
+          e.dataTransfer.dropEffect = "move";
+        });
+
+        zoneEl.addEventListener("dragleave", () => {
+          zoneEl.classList.remove("over");
+        });
+
+        zoneEl.addEventListener("drop", (e) => {
+          e.preventDefault();
+          zoneEl.classList.remove("over");
+          if (!draggedEl) return;
+
+          const itemEl = zoneEl.closest(".item");
+          clearStatus(itemEl);
+
+          // If dropping on a token inside zone: insert before that token
+          const targetToken = e.target.closest(".token");
+          if (targetToken && targetToken.parentElement === zoneEl) {
+            zoneEl.insertBefore(draggedEl, targetToken);
+          } else {
+            zoneEl.appendChild(draggedEl);
+          }
+        });
+      }
+
+      function clearStatus(itemEl) {
+        const s = itemEl.querySelector(".status");
+        s.textContent = "";
+        s.className = "status";
+      }
+
+      /** ---------- RENDER ---------- **/
+      const grid = document.getElementById("grid");
+
+      function render() {
+        grid.innerHTML = "";
+        EXERCISE.forEach((it) => {
+          const card = document.createElement("div");
+          card.className = "item";
+          card.dataset.id = it.id;
+
+          const row = document.createElement("div");
+          row.className = "row";
+
+          const meta = document.createElement("div");
+          meta.className = "meta";
+          meta.textContent = `#${it.id}`;
+
+          const zones = document.createElement("div");
+          zones.className = "zones";
+
+          // Answer zone
+          const answerWrap = document.createElement("div");
+          const answerLabel = document.createElement("div");
+          answerLabel.className = "label";
+          answerLabel.textContent = "Your sentence";
+          const answerLine = document.createElement("div");
+          answerLine.className = "answerLine";
+
+          const answer = document.createElement("div");
+          answer.className = "zone answer";
+          answer.setAttribute("aria-label", "Answer area");
+          wireZone(answer);
+
+          const punct = document.createElement("span");
+          punct.className = "punct";
+          punct.textContent = it.punctuation;
+
+          answerLine.appendChild(answer);
+          answerLine.appendChild(punct);
+
+          answerWrap.appendChild(answerLabel);
+          answerWrap.appendChild(answerLine);
+
+          if (it.ru) {
+            const ruEl = document.createElement("div");
+            ruEl.className = "sentence-translation";
+            ruEl.textContent = it.ru;
+            answerWrap.appendChild(ruEl);
+          }
+
+          // Bank zone
+          const bankWrap = document.createElement("div");
+          const bankLabel = document.createElement("div");
+          bankLabel.className = "label";
+          bankLabel.textContent = "Word bank";
+          const bank = document.createElement("div");
+          bank.className = "zone bank";
+          bank.setAttribute("aria-label", "Word bank");
+          wireZone(bank);
+
+          const words = shuffle(it.bank);
+          words.forEach((w) => bank.appendChild(makeToken(w)));
+
+          bankWrap.appendChild(bankLabel);
+          bankWrap.appendChild(bank);
+
+          zones.appendChild(bankWrap);
+          zones.appendChild(answerWrap);
+
+          // Actions
+          const actions = document.createElement("div");
+          actions.className = "actions";
+
+          const checkBtn = document.createElement("button");
+          checkBtn.textContent = "Проверить";
+          checkBtn.addEventListener("click", () => checkOne(card, it));
+
+          const resetBtn = document.createElement("button");
+          resetBtn.className = "secondary";
+          resetBtn.textContent = "Сброс";
+          resetBtn.addEventListener("click", () => resetOne(card, it));
+
+          const shuffleBtn = document.createElement("button");
+          shuffleBtn.className = "secondary";
+          shuffleBtn.textContent = "Перемешать";
+          shuffleBtn.addEventListener("click", () => shuffleOne(card, it));
+
+          const status = document.createElement("div");
+          status.className = "status";
+
+          actions.appendChild(checkBtn);
+          actions.appendChild(resetBtn);
+          actions.appendChild(shuffleBtn);
+          actions.appendChild(status);
+
+          row.appendChild(meta);
+          row.appendChild(zones);
+
+          card.appendChild(row);
+          card.appendChild(actions);
+
+          grid.appendChild(card);
+        });
+      }
+
+      function getUserTokens(card) {
+        const answer = card.querySelector(".answer");
+        return [...answer.querySelectorAll(".token")].map((t) =>
+          t.textContent.trim(),
+        );
+      }
+
+      function checkOne(card, it) {
+        const user = getUserTokens(card);
+        const status = card.querySelector(".status");
+
+        if (user.length !== it.bank.length) {
+          status.textContent = "Собери все слова.";
+          status.className = "status bad";
+          return;
+        }
+
+        const ok = isCorrect(user, it.variants);
+        if (ok) {
+          status.textContent = "Верно";
+          status.className = "status ok";
+        } else {
+          status.textContent = "Неверно";
+          status.className = "status bad";
+        }
+      }
+
+      function resetOne(card, it) {
+        const bank = card.querySelector(".bank");
+        const answer = card.querySelector(".answer");
+        const allTokens = [
+          ...bank.querySelectorAll(".token"),
+          ...answer.querySelectorAll(".token"),
+        ];
+
+        // Return all tokens to bank (original order = current list order, then shuffle optional)
+        allTokens.forEach((t) => bank.appendChild(t));
+        clearStatus(card);
+      }
+
+      function shuffleOne(card, it) {
+        const bank = card.querySelector(".bank");
+        const answer = card.querySelector(".answer");
+        // move all to bank
+        [...answer.querySelectorAll(".token")].forEach((t) =>
+          bank.appendChild(t),
+        );
+
+        // shuffle bank children
+        const tokens = [...bank.querySelectorAll(".token")];
+        const shuffled = shuffle(tokens);
+        shuffled.forEach((t) => bank.appendChild(t));
+        clearStatus(card);
+      }
+
+      /** ---------- GLOBAL BUTTONS ---------- **/
+      document.getElementById("checkAll").addEventListener("click", () => {
+        EXERCISE.forEach((it) => {
+          const card = grid.querySelector(`.item[data-id="${it.id}"]`);
+          checkOne(card, it);
+        });
+      });
+
+      document.getElementById("resetAll").addEventListener("click", () => {
+        EXERCISE.forEach((it) => {
+          const card = grid.querySelector(`.item[data-id="${it.id}"]`);
+          resetOne(card, it);
+        });
+      });
+
+      /** ---------- INIT ---------- **/
+      render();
+    </script>
+  </body>
+</html>
